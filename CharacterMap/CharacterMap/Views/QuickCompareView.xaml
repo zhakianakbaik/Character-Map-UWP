@@ -126,7 +126,7 @@
                             Axis="{x:Bind Axis}"
                             FallbackFont="{x:Bind core:Converters.GetFontFallback()}"
                             FontFace="{x:Bind Variant.FontFace}"
-                            FontFamily="{x:Bind Variant.Source, FallbackValue='XamlAutoFontFamily', TargetNullValue='XamlAutoFontFamily'}"
+                            FontFamily="{x:Bind Variant.WSSSource, FallbackValue='XamlAutoFontFamily', TargetNullValue='XamlAutoFontFamily'}"
                             FontStretch="{x:Bind Variant.FontFace.Stretch}"
                             FontStyle="{x:Bind Variant.FontFace.Style}"
                             FontWeight="{x:Bind Variant.FontFace.Weight}"
@@ -564,7 +564,10 @@
                                     <DataTemplate x:DataType="core:FontVariant">
                                         <controls:ContentGroup>
                                             <controls:ContentGroup.Text>
-                                                <TextBlock FontSize="{StaticResource ControlContentThemeFontSize}" Foreground="{ThemeResource TextControlPlaceholderForeground}" Text="{x:Bind PreferredName}" />
+                                                <TextBlock
+                                                    FontSize="{StaticResource ControlContentThemeFontSize}"
+                                                    Foreground="{ThemeResource TextControlPlaceholderForeground}"
+                                                    Text="{x:Bind PreferredName}" />
                                             </controls:ContentGroup.Text>
                                             <controls:ContentGroup.SecondaryContent>
                                                 <TextBlock

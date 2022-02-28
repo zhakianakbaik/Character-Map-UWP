@@ -59,6 +59,8 @@ namespace CharacterMapCX
 
 	private:
 
+		DWriteFontSet^ Parse(ComPtr<IDWriteFontCollection3> fontCollection);
+
 		IAsyncAction^ ListenForFontSetExpirationAsync();
 
 		bool m_isFontSetStale = true;

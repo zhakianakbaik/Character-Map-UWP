@@ -482,89 +482,99 @@
                                                     <RowDefinition Height="Auto" />
                                                     <RowDefinition Height="Auto" />
                                                     <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
                                                 </Grid.RowDefinitions>
 
 
-                                                <TextBlock x:Uid="FontPropFamily" Grid.Row="0" />
+                                                <TextBlock Grid.Row="0">
+                                                    <Run Text="WSS" />
+                                                    <Run x:Uid="FontPropFamily" />
+                                                </TextBlock>
                                                 <TextBlock
                                                     Grid.Row="0"
                                                     Style="{StaticResource Value}"
                                                     Text="{Binding SelectedFont.Name}" />
 
-                                                <TextBlock x:Uid="FontPropFace" Grid.Row="1" />
+                                                <TextBlock Grid.Row="1" Text="Typographic Family Name" />
                                                 <TextBlock
                                                     Grid.Row="1"
                                                     Style="{StaticResource Value}"
-                                                    Text="{Binding SelectedVariant.PreferredName}" />
+                                                    Text="{Binding SelectedVariant.DirectWriteProperties.TypographicFamilyName}" />
 
-                                                <TextBlock x:Uid="FontPropCharCount" Grid.Row="2" />
+                                                <TextBlock x:Uid="FontPropFace" Grid.Row="2" />
                                                 <TextBlock
                                                     Grid.Row="2"
                                                     Style="{StaticResource Value}"
-                                                    Text="{x:Bind ViewModel.SelectedVariant.Characters.Count, Mode=OneWay}" />
+                                                    Text="{Binding SelectedVariant.PreferredName}" />
 
-                                                <TextBlock x:Uid="FontPropCount" Grid.Row="3" />
+                                                <TextBlock x:Uid="FontPropCharCount" Grid.Row="3" />
                                                 <TextBlock
                                                     Grid.Row="3"
                                                     Style="{StaticResource Value}"
-                                                    Text="{x:Bind ViewModel.SelectedVariant.FontFace.GlyphCount, Mode=OneWay}" />
+                                                    Text="{x:Bind ViewModel.SelectedVariant.Characters.Count, Mode=OneWay}" />
 
-                                                <TextBlock x:Uid="FontPropType" Grid.Row="4" />
+                                                <TextBlock x:Uid="FontPropCount" Grid.Row="4" />
                                                 <TextBlock
                                                     Grid.Row="4"
                                                     Style="{StaticResource Value}"
-                                                    Text="{Binding SelectedVariant.FontFace.FileFormatType}" />
+                                                    Text="{x:Bind ViewModel.SelectedVariant.FontFace.GlyphCount, Mode=OneWay}" />
 
-                                                <TextBlock x:Uid="FontPropSymbol" Grid.Row="5" />
+                                                <TextBlock x:Uid="FontPropType" Grid.Row="5" />
                                                 <TextBlock
                                                     Grid.Row="5"
                                                     Style="{StaticResource Value}"
-                                                    Text="{Binding SelectedVariant.FontFace.IsSymbolFont}" />
+                                                    Text="{Binding SelectedVariant.FontFace.FileFormatType}" />
 
-                                                <TextBlock x:Uid="FontPropMonospaced" Grid.Row="6" />
+                                                <TextBlock x:Uid="FontPropSymbol" Grid.Row="6" />
                                                 <TextBlock
                                                     Grid.Row="6"
                                                     Style="{StaticResource Value}"
-                                                    Text="{Binding SelectedVariant.FontFace.IsMonospaced}" />
+                                                    Text="{Binding SelectedVariant.FontFace.IsSymbolFont}" />
 
-                                                <TextBlock x:Uid="FontPropStyle" Grid.Row="7" />
+                                                <TextBlock x:Uid="FontPropMonospaced" Grid.Row="7" />
                                                 <TextBlock
                                                     Grid.Row="7"
                                                     Style="{StaticResource Value}"
-                                                    Text="{Binding SelectedVariant.FontFace.Style}" />
+                                                    Text="{Binding SelectedVariant.FontFace.IsMonospaced}" />
 
-                                                <TextBlock x:Uid="FontPropStretch" Grid.Row="8" />
+                                                <TextBlock x:Uid="FontPropStyle" Grid.Row="8" />
                                                 <TextBlock
                                                     Grid.Row="8"
                                                     Style="{StaticResource Value}"
-                                                    Text="{Binding SelectedVariant.FontFace.Stretch}" />
+                                                    Text="{Binding SelectedVariant.FontFace.Style}" />
 
-                                                <TextBlock x:Uid="FontPropWeight" Grid.Row="9" />
+                                                <TextBlock x:Uid="FontPropStretch" Grid.Row="9" />
                                                 <TextBlock
                                                     Grid.Row="9"
                                                     Style="{StaticResource Value}"
-                                                    Text="{x:Bind core:Converters.GetWeightName(ViewModel.SelectedVariant.FontFace.Weight), Mode=OneWay}" />
+                                                    Text="{Binding SelectedVariant.FontFace.Stretch}" />
 
-                                                <TextBlock x:Uid="FontPropInstallType" Grid.Row="10" />
+                                                <TextBlock x:Uid="FontPropWeight" Grid.Row="10" />
                                                 <TextBlock
                                                     Grid.Row="10"
                                                     Style="{StaticResource Value}"
-                                                    Text="{x:Bind ViewModel.SelectedVariant.GetProviderName(), Mode=OneWay}" />
+                                                    Text="{x:Bind core:Converters.GetWeightName(ViewModel.SelectedVariant.FontFace.Weight), Mode=OneWay}" />
 
-                                                <TextBlock x:Uid="FontPropFileSize" Grid.Row="11" />
+                                                <TextBlock x:Uid="FontPropInstallType" Grid.Row="11" />
                                                 <TextBlock
                                                     Grid.Row="11"
+                                                    Style="{StaticResource Value}"
+                                                    Text="{x:Bind ViewModel.SelectedVariant.GetProviderName(), Mode=OneWay}" />
+
+                                                <TextBlock x:Uid="FontPropFileSize" Grid.Row="12" />
+                                                <TextBlock
+                                                    Grid.Row="12"
                                                     Style="{StaticResource Value}"
                                                     Text="{x:Bind core:Converters.GetFileSize(ViewModel.SelectedVariantAnalysis.FileSize), Mode=OneWay}" />
 
                                                 <TextBlock
                                                     x:Name="FontPropXaml"
                                                     x:Uid="FontPropXaml"
-                                                    Grid.Row="12"
+                                                    Grid.Row="13"
                                                     Padding="0,4,0,0"
                                                     Visibility="{x:Bind ViewModel.SelectedVariant.IsImported, Mode=OneWay, FallbackValue=Collapsed}" />
                                                 <TextBlock
-                                                    Grid.Row="13"
+                                                    Grid.Row="14"
                                                     Grid.Column="0"
                                                     Grid.ColumnSpan="2"
                                                     Margin="0,-4,0,0"
@@ -575,10 +585,10 @@
 
                                                 <TextBlock
                                                     x:Uid="FontPropFilePath"
-                                                    Grid.Row="12"
+                                                    Grid.Row="13"
                                                     Visibility="{x:Bind ShowFilePath(ViewModel.SelectedVariantAnalysis.FilePath, ViewModel.SelectedVariant.IsImported), Mode=OneWay, FallbackValue=Collapsed}" />
                                                 <TextBlock
-                                                    Grid.Row="13"
+                                                    Grid.Row="14"
                                                     Grid.Column="0"
                                                     Grid.ColumnSpan="2"
                                                     Margin="0,-4,0,0"
@@ -1010,7 +1020,7 @@
                     ZoomMode="Enabled">
                     <ItemsControl
                         x:Name="TypeRampList"
-                        FontFamily="{Binding FontFamily, Mode=OneWay, FallbackValue='Segoe UI'}"
+                        FontFamily="{Binding SelectedVariant.WSSSource, Mode=OneWay, FallbackValue='Segoe UI'}"
                         FontStretch="{x:Bind ViewModel.SelectedVariant.FontFace.Stretch, Mode=OneWay}"
                         FontStyle="{x:Bind ViewModel.SelectedVariant.FontFace.Style, Mode=OneWay}"
                         FontWeight="{x:Bind ViewModel.SelectedVariant.FontFace.Weight, Mode=OneWay}"

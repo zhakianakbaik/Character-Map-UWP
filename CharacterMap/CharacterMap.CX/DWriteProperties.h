@@ -27,6 +27,8 @@ namespace CharacterMapCX
 
 		property String^ FamilyName { String^ get() { return m_familyName; } }
 
+		property String^ TypographicFamilyName { String^ get() { return m_typographicFamilyName; } }
+
 		property String^ FaceName	{ String^ get() { return m_faceName; } }
 
 		/// <summary>
@@ -61,6 +63,11 @@ namespace CharacterMapCX
 			m_familyName = name;
 		}
 
+		void SetTypographicFamilyName(String^ name)
+		{
+			m_typographicFamilyName = name;
+		}
+
 	private:
 		inline DWriteProperties() { }
 
@@ -68,6 +75,7 @@ namespace CharacterMapCX
 		bool m_isColorFont = false;
 		String^ m_remoteSource = nullptr;
 		String^ m_familyName = nullptr;
+		String^ m_typographicFamilyName = nullptr;
 		String^ m_faceName = nullptr;
 		DWriteFontSource m_source = DWriteFontSource::Unknown;
 	};

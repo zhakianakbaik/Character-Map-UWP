@@ -55,6 +55,77 @@ IAsyncAction^ NativeInterop::ListenForFontSetExpirationAsync()
 		});
 }
 
+DWriteFontSet^ NativeInterop::Parse(ComPtr<IDWriteFontCollection3> fontCollection)
+{
+	auto vec = ref new Vector<DWriteFontFace^>();
+
+	int appxCount = 0;
+	int cloudCount = 0;
+	int variableCount = 0;
+
+	// Prepare locale information
+	wchar_t localeName[LOCALE_NAME_MAX_LENGTH];
+	int ls = GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH);
+
+	ComPtr<IDWriteFontFamily2> family;
+	for (size_t i = 0; i < fontCollection->GetFontFamilyCount(); i++)
+	{
+		// Get the font collection
+		fontCollection->GetFontFamily(i, &family);
+
+		// Retrieve the family name. This is needed when targeting the 
+		// Windows 11 SDK as XAML loads fonts differently on this SDK.
+		String^ familyName = nullptr;
+		ComPtr<IDWriteLocalizedStrings> names;
+		if (SUCCEEDED(family->GetFamilyNames(&names)))
+			familyName = DirectWrite::GetLocaleString(names, ls, localeName);
+
+		auto fontCount = family->GetFontCount();
+		for (uint32_t i = 0; i < fontCount; ++i)
+		{
+			ComPtr<IDWriteFontFaceReference> fr0;
+			ComPtr<IDWriteFontFaceReference1> fontResource;
+			ThrowIfFailed(family->GetFontFaceReference(i, &fr0));
+			ThrowIfFailed(fr0.As<IDWriteFontFaceReference1>(&fontResource));
+
+			ComPtr<IDWriteFontSet1> fs1;
+			ComPtr<IDWriteFontSet3> fs3;
+			family->GetFontSet(&fs1);
+			fs1.As(&fs3);
+
+			if (fontResource->GetLocality() == DWRITE_LOCALITY::DWRITE_LOCALITY_LOCAL)
+			{
+				auto properties = DirectWrite::GetDWriteProperties(fs3, i, fontResource, ls, localeName);
+
+				properties->SetTypographicFamilyName(familyName);
+
+				// Some cloud providers, like Microsoft Office, can cause issues with the underlying
+				// DirectWrite system when they are open. This can cause us to be unable to create
+				// a IDWriteFontFace3 from certain fonts, also leading us to not be able to get the
+				// properties. Nothing we can do except *don't* crash.
+				if (properties != nullptr)
+				{
+					auto canvasFontFace = GetOrCreate<CanvasFontFace>(fontResource.Get());
+					auto fontface = ref new DWriteFontFace(canvasFontFace, properties);
+
+					if (properties->Source == DWriteFontSource::AppxPackage)
+						appxCount++;
+					else if (properties->Source == DWriteFontSource::RemoteFontProvider)
+						cloudCount++;
+
+					if (properties->HasVariations)
+						variableCount++;
+
+					vec->Append(fontface);
+				}
+			}
+		}
+	}
+
+	return ref new DWriteFontSet(vec->GetView(), appxCount, cloudCount, variableCount);
+}
+
+
 DWriteFontSet^ NativeInterop::GetSystemFonts()
 {
 	if (m_isFontSetStale)
@@ -65,13 +136,18 @@ DWriteFontSet^ NativeInterop::GetSystemFonts()
 
 	if (m_systemFontSet == nullptr || m_appFontSet == nullptr)
 	{
-		ComPtr<IDWriteFontSet2> fontSet;
-		ThrowIfFailed(m_dwriteFactory->GetSystemFontSet(true, &fontSet));
+		ComPtr<IDWriteFontSet1> fontSet;
+		ComPtr<IDWriteFontCollection3> fontCollection;
+		//ThrowIfFailed(m_dwriteFactory->GetSystemFontSet(true, &fontSet));
+
+		ThrowIfFailed(m_dwriteFactory->GetSystemFontCollection(true, DWRITE_FONT_FAMILY_MODEL::DWRITE_FONT_FAMILY_MODEL_TYPOGRAPHIC, &fontCollection));
+
+		fontCollection->GetFontSet(&fontSet);
 
 		ComPtr<IDWriteFontSet3> fontSet3;
 		ThrowIfFailed(fontSet.As(&fontSet3));
 		m_systemFontSet = fontSet3;
-		m_appFontSet = DirectWrite::GetFonts(fontSet3);
+		m_appFontSet = Parse(fontCollection);
 		m_isFontSetStale = false;
 
 		// We listen for the expiration event on a background thread

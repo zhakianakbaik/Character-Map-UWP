@@ -358,6 +358,16 @@
 
                                 </controls:SettingsPresenter>
 
+                                <controls:SettingsPresenter Title="Font Family Grouping">
+                                    <ComboBox
+                                        MinWidth="256"
+                                        Margin="0 8 0 0"
+                                        SelectedItem="{x:Bind Settings.FamilyGrouping, Mode=TwoWay}">
+                                        <core:FontFamilyGrouping>WSS</core:FontFamilyGrouping>
+                                        <core:FontFamilyGrouping>Typographic</core:FontFamilyGrouping>
+                                    </ComboBox>
+                                </controls:SettingsPresenter>
+
                                 <controls:SettingsPresenter
                                     x:Name="ColorThemeSettings"
                                     x:Load="{x:Bind _themeSupportsDark}"
@@ -388,18 +398,16 @@
                                 </controls:SettingsPresenter>
 
                                 <controls:SettingsPresenter x:Uid="SettingsDesignStyle">
-                                    <StackPanel>
-                                        <ComboBox
-                                            MinWidth="256"
-                                            Margin="0 8 0 0"
-                                            SelectedIndex="{x:Bind Settings.ApplicationDesignTheme}"
-                                            SelectionChanged="Design_SelectionChanged">
-                                            <x:String>Windows 10</x:String>
-                                            <x:String>Windows 11</x:String>
-                                            <x:String>Classic Windows</x:String>
-                                            <x:String>Zune Desktop</x:String>
-                                        </ComboBox>
-                                    </StackPanel>
+                                    <ComboBox
+                                        MinWidth="256"
+                                        Margin="0 8 0 0"
+                                        SelectedIndex="{x:Bind Settings.ApplicationDesignTheme}"
+                                        SelectionChanged="Design_SelectionChanged">
+                                        <x:String>Windows 10</x:String>
+                                        <x:String>Windows 11</x:String>
+                                        <x:String>Classic Windows</x:String>
+                                        <x:String>Zune Desktop</x:String>
+                                    </ComboBox>
                                 </controls:SettingsPresenter>
 
                                 <controls:UXButton

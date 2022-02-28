@@ -159,6 +159,12 @@ namespace CharacterMap.Core
             set => BroadcastSet(value);
         }
 
+        public FontFamilyGrouping FamilyGrouping
+        {
+            get => (FontFamilyGrouping)Get((int)FontFamilyGrouping.WSS);
+            set => Set((int)value);
+        }
+
         // This setting has been deprecated.
         // Do not reuse this setting name.
         //public bool ShowDevUtils
@@ -267,7 +273,7 @@ namespace CharacterMap.Core
                 // Upgrade to Version 1.0.
 
                 // 1. Check version of Windows. If Windows 11, default to the Windows 11 theme
-                if (ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 14))
+                if (Utils.IsWindows11SDK)
                     ApplicationDesignTheme = (int)DesignStyle.Fluent11;
 
                 SettingsVersion = 1;

@@ -412,5 +412,7 @@ namespace CharacterMap.Core
         public static bool Supports1809 { get; } = ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 7);
 
         public static bool Supports1903 { get; } = ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 8);
+
+        public static bool IsWindows11SDK { get; } = ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 14);
     }
 }

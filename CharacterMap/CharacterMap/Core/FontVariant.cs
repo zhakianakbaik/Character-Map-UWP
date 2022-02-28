@@ -65,6 +65,8 @@ namespace CharacterMap.Core
 
         public string FamilyName { get; }
 
+        public string FamilyNameWin2D { get; }
+
         public CanvasUnicodeRange[] UnicodeRanges => FontFace.UnicodeRanges;
 
         public Panose Panose { get; }
@@ -72,9 +74,17 @@ namespace CharacterMap.Core
         public DWriteProperties DirectWriteProperties { get; }
 
         /// <summary>
-        /// File-system path for DWrite / XAML to construct a font for use in this application
+        /// File-system path for XAML to construct a font for use in this application
         /// </summary>
         public string Source { get; }
+        
+        /// <summary>
+        /// Source for DirectWrite to construct a font from. 
+        /// Whereas Source on Windows 11 uses Typographic family names,
+        /// our DWrite control relies on using the WSS family name on both
+        /// Windows 10 and Windows 11 SDK's
+        /// </summary>
+        public string WSSSource => DirectWriteProperties.FamilyName;
 
         /// <summary>
         /// A FontFamily source for XAML that includes a custom fallback font.
@@ -90,17 +100,17 @@ namespace CharacterMap.Core
         public FontVariant(CanvasFontFace face, StorageFile file, DWriteProperties dwProps)
         {
             FontFace = face;
-            FamilyName = dwProps.FamilyName;
+            FamilyName = Utils.IsWindows11SDK ? dwProps.TypographicFamilyName : dwProps.FamilyName;
 
             if (file != null)
             {
                 IsImported = true;
                 FileName = file.Name;
-                Source = $"{FontFinder.GetAppPath(file)}#{dwProps.FamilyName}";
+                Source = $"{FontFinder.GetAppPath(file)}#{FamilyName}";
             }
             else
             {
-                Source = dwProps.FamilyName;
+                Source = FamilyName;
             }
 
             string name = dwProps.FaceName;
@@ -110,6 +120,8 @@ namespace CharacterMap.Core
             DirectWriteProperties = dwProps;
             PreferredName = name;
             Panose = PanoseParser.Parse(face);
+
+            FamilyNameWin2D = FontFace.FamilyNames["en-us"];
         }
 
         public string GetProviderName()

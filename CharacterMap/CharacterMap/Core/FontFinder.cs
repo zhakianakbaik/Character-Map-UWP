@@ -17,6 +17,18 @@ using WoffToOtf;
 
 namespace CharacterMap.Core
 {
+    public enum FontFamilyGrouping
+    {
+        /// <summary>
+        /// Weight, Stretch, Style
+        /// </summary>
+        WSS = 0, 
+        /// <summary>
+        /// Typographic family name
+        /// </summary>
+        Typographic = 1
+    }
+
     public class FontImportResult
     {
         public FontImportResult(List<StorageFile> imported, List<StorageFile> existing, List<(IStorageItem, string)> invalid)
@@ -225,7 +237,7 @@ namespace CharacterMap.Core
         {
             try
             {
-                var familyName = font.Properties.FamilyName;
+                var familyName = ResourceHelper.AppSettings.FamilyGrouping == FontFamilyGrouping.WSS ? font.Properties.FamilyName : font.Properties.TypographicFamilyName;
                 if (!string.IsNullOrEmpty(familyName))
                 {
                     /* Check if we already have a listing for this fontFamily */
